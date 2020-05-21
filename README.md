@@ -9,4 +9,4 @@ Aplicação: ASP.NET MVC Core
 
 Linguagem: C#
 
-Conteúdo: Uma aplicação web em ASP.NET MVC Core, seguindo uma implantação rápida sem seguir o conceito de camadas.
+Conteúdo: Uma aplicação web em ASP.NET MVC Core, seguindo uma implantação rápida com o scaffold sem aplicar o conceito de camadas.
