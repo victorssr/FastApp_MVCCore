@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FastApp_MVCCore.Data.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(ContextBase))]
     [Migration("20200521141527_Victor_01")]
     partial class Victor_01
     {

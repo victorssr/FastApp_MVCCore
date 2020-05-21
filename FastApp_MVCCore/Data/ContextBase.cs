@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.EntityFrameworkCore;
 using FastApp_MVCCore.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 
 namespace FastApp_MVCCore.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ContextBase : IdentityDbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        public ContextBase (DbContextOptions options)
             : base(options)
         {
         }
