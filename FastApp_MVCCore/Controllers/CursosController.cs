@@ -10,22 +10,23 @@ using FastApp_MVCCore.Models;
 
 namespace FastApp_MVCCore.Controllers
 {
-    public class ProfessoresController : Controller
+    public class CursosController : Controller
     {
         private readonly ContextBase _context;
 
-        public ProfessoresController(ContextBase context)
+        public CursosController(ContextBase context)
         {
             _context = context;
         }
 
-        // GET: Professores
+        // GET: Cursos
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Professores.ToListAsync());
+            var fastApp_MVCCoreContext = _context.Cursos.Include(c => c.Professor);
+            return View(await fastApp_MVCCoreContext.ToListAsync());
         }
 
-        // GET: Professores/Details/5
+        // GET: Cursos/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
@@ -33,40 +34,43 @@ namespace FastApp_MVCCore.Controllers
                 return NotFound();
             }
 
-            var professor = await _context.Professores
+            var curso = await _context.Cursos
+                .Include(c => c.Professor)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (professor == null)
+            if (curso == null)
             {
                 return NotFound();
             }
 
-            return View(professor);
+            return View(curso);
         }
 
-        // GET: Professores/Create
+        // GET: Cursos/Create
         public IActionResult Create()
         {
+            ViewData["ProfessorId"] = new SelectList(_context.Set<Professor>(), "Id", "Nome");
             return View();
         }
 
-        // POST: Professores/Create
+        // POST: Cursos/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Professor professor)
+        public async Task<IActionResult> Create(Curso curso)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(professor);
-
+                curso.Id = Guid.NewGuid();
+                _context.Add(curso);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(professor);
+            ViewData["ProfessorId"] = new SelectList(_context.Set<Professor>(), "Id", "Nome", curso.ProfessorId);
+            return View(curso);
         }
 
-        // GET: Professores/Edit/5
+        // GET: Cursos/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
@@ -74,21 +78,21 @@ namespace FastApp_MVCCore.Controllers
                 return NotFound();
             }
 
-            var professor = await _context.Professores.FindAsync(id);
-            if (professor == null)
+            var curso = await _context.Cursos.FindAsync(id);
+            if (curso == null)
             {
                 return NotFound();
             }
-
-            return View(professor);
+            ViewData["ProfessorId"] = new SelectList(_context.Set<Professor>(), "Id", "Nome", curso.ProfessorId);
+            return View(curso);
         }
 
-        // POST: Professores/Edit/5
+        // POST: Cursos/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, Professor professor)
+        public async Task<IActionResult> Edit(Guid id, Curso curso)
         {
-            if (id != professor.Id)
+            if (id != curso.Id)
             {
                 return NotFound();
             }
@@ -97,12 +101,12 @@ namespace FastApp_MVCCore.Controllers
             {
                 try
                 {
-                    _context.Update(professor);
+                    _context.Update(curso);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProfessorExists(professor.Id))
+                    if (!CursoExists(curso.Id))
                     {
                         return NotFound();
                     }
@@ -113,10 +117,11 @@ namespace FastApp_MVCCore.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(professor);
+            ViewData["ProfessorId"] = new SelectList(_context.Set<Professor>(), "Id", "Nome", curso.ProfessorId);
+            return View(curso);
         }
 
-        // GET: Professores/Delete/5
+        // GET: Cursos/Delete/5
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
@@ -124,29 +129,31 @@ namespace FastApp_MVCCore.Controllers
                 return NotFound();
             }
 
-            var professor = await _context.Professores.FirstOrDefaultAsync(m => m.Id == id);
-            if (professor == null)
+            var curso = await _context.Cursos
+                .Include(c => c.Professor)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (curso == null)
             {
                 return NotFound();
             }
 
-            return View(professor);
+            return View(curso);
         }
 
-        // POST: Professores/Delete/5
+        // POST: Cursos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var professor = await _context.Professores.FindAsync(id);
-            _context.Professores.Remove(professor);
+            var curso = await _context.Cursos.FindAsync(id);
+            _context.Cursos.Remove(curso);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProfessorExists(Guid id)
+        private bool CursoExists(Guid id)
         {
-            return _context.Professores.Any(e => e.Id == id);
+            return _context.Cursos.Any(e => e.Id == id);
         }
     }
 }
