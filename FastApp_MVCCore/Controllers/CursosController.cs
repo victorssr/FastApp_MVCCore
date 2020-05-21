@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FastApp_MVCCore.Data;
 using FastApp_MVCCore.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FastApp_MVCCore.Controllers
 {
+    [Authorize]
     public class CursosController : Controller
     {
         private readonly ContextBase _context;
@@ -19,6 +21,7 @@ namespace FastApp_MVCCore.Controllers
             _context = context;
         }
 
+        [AllowAnonymous]
         // GET: Cursos
         public async Task<IActionResult> Index()
         {
@@ -26,6 +29,7 @@ namespace FastApp_MVCCore.Controllers
             return View(await fastApp_MVCCoreContext.ToListAsync());
         }
 
+        [AllowAnonymous]
         // GET: Cursos/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {

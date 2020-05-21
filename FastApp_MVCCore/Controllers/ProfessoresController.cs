@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using FastApp_MVCCore.Data;
 using FastApp_MVCCore.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FastApp_MVCCore.Controllers
 {
+    [Authorize]
     public class ProfessoresController : Controller
     {
         private readonly ContextBase _context;
@@ -20,12 +22,14 @@ namespace FastApp_MVCCore.Controllers
         }
 
         // GET: Professores
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Professores.ToListAsync());
         }
 
         // GET: Professores/Details/5
+        [AllowAnonymous]
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
